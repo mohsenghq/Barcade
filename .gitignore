@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+runs/
+checkpoints/
+*.onnx
+!tests/fixtures/
+config/local_*.yaml

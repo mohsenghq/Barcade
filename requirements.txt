@@ -1,0 +1,10 @@
+# CUDA line is NON-NEGOTIABLE: PyTorch dropped Pascal (sm_61) from newer CUDA
+# lines, and the default pip install is CPU-only. The 1080 Ti needs +cu126.
+torch==2.13.0+cu126
+--extra-index-url https://download.pytorch.org/whl/cu126
+
+numpy>=1.26
+python-chess>=1.999
+onnx>=1.16
+onnxruntime>=1.18
+pytest>=8

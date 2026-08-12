@@ -1,0 +1,20 @@
+[project]
+name = "rl-game-train"
+version = "0.1.0"
+description = "Self-play RL trainer for the Arcade Vault chess AI (az119/v1 contract)"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26",
+  "python-chess>=1.999",
+  "onnx>=1.16",
+  "onnxruntime>=1.18",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
