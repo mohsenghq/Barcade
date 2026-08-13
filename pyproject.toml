@@ -8,6 +8,7 @@ dependencies = [
   "python-chess>=1.999",
   "onnx>=1.16",
   "onnxruntime>=1.18",
+  "zstandard>=0.22",
 ]
 
 [project.optional-dependencies]

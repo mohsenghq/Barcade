@@ -8,3 +8,4 @@ python-chess>=1.999
 onnx>=1.16
 onnxruntime>=1.18
 pytest>=8
+zstandard>=0.22

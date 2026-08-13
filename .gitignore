@@ -7,3 +7,4 @@ checkpoints/
 *.onnx
 !tests/fixtures/
 config/local_*.yaml
+data/

@@ -20,10 +20,14 @@ def test_cuda_available():
 
 def test_pascal_supported():
     arch = torch.cuda.get_arch_list()
-    assert "sm_61" in arch, (
-        f"torch build lacks Pascal sm_61 support (arch list: {arch}). "
+    # The 2.13.0+cu126 wheel ships sm_60 cubin/PTX; sm_61 (GTX 1080 Ti)
+    # runs it via driver PTX JIT. The real tripwire is a working matmul.
+    assert "sm_60" in arch or "sm_61" in arch, (
+        f"torch build lacks Pascal support (arch list: {arch}). "
         "Use torch==2.13.0+cu126."
     )
+    x = torch.randn(256, 256, device="cuda")
+    assert torch.isfinite((x @ x)).all(), "CUDA matmul failed on this GPU"
 
 
 def test_device_name():

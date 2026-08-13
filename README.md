@@ -29,6 +29,22 @@ pip install -r requirements.txt
 python -c "import torch; assert torch.cuda.is_available(), 'CUDA not available'"
 ```
 
+## Pipeline
+
+One command per stage (`python -m src.cli <cmd>`):
+
+| Stage | Command | Notes |
+|---|---|---|
+| Fetch corpus | `python -m src.data.fetch_corpus 2024-01 --count 200000` | streams the Lichess monthly dump, keeps the first N finished games |
+| Supervised warm-start | `python -m src.cli warmstart data/warmstart.pgn` | policy CE + outcome value MSE |
+| RL fine-tune | `python -m src.cli selfplay` | MCTS/PUCT self-play against itself, replay buffer |
+| Eval gate | `python -m src.cli eval runs/candidate.pt runs/champion.pt` | candidate must beat champion + the greedy-material baseline |
+| Golden fixtures | `python -m src.cli fixtures ../mini_games/test/fixtures/az119` | FEN → 119-plane tensor + policy indices, committed into the app |
+| Export | `python -m src.cli export runs/chess_net.pt runs/export` | fp32 + int8 QDQ ONNX + manifest.json |
+
+The app is gated on `expectedNetworkFormatVersion` == `az119/v1`; a net ships
+only via a `net-v*` release that passed the eval gate.
+
 ## Layout
 
 ```
