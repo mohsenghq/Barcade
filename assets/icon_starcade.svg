@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#241A45"/>
+      <stop offset="100%" stop-color="#0B0817"/>
+    </radialGradient>
+    <linearGradient id="coral" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF5A5F"/>
+      <stop offset="100%" stop-color="#FF7A72"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#29E0E0"/>
+      <stop offset="100%" stop-color="#3DDC97"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Deep space background -->
+  <circle cx="256" cy="256" r="256" fill="url(#bg)"/>
+
+  <!-- Subtle gold halo behind star -->
+  <circle cx="256" cy="244" r="140" fill="#FFC53D" opacity="0.08"/>
+
+  <!-- 6-pointed star — bright, crisp edges -->
+  <polygon points="256,68 284,188 400,144 316,244 400,340 284,296 256,416 228,296 112,340 196,244 112,144 228,188" fill="#FFC53D"/>
+  <polygon points="256,68 284,188 400,144 316,244 400,340 284,296 256,416 228,296 112,340 196,244 112,144 228,188" fill="none" stroke="#FFE08A" stroke-width="4"/>
+  <polygon points="256,120 274,196 348,168 300,238 348,308 274,280 256,356 238,280 164,308 212,238 164,168 238,196" fill="#FFE08A" opacity="0.65"/>
+
+  <!-- Coral play triangle -->
+  <polygon points="232,192 232,318 324,255" fill="url(#coral)"/>
+  <polygon points="242,206 242,304 310,255" fill="#FF9A9E" opacity="0.35"/>
+
+  <!-- Cyan orbital ring -->
+  <ellipse cx="256" cy="256" rx="150" ry="48" fill="none" stroke="url(#cyan)" stroke-width="3.5" opacity="0.7" transform="rotate(-20 256 256)"/>
+  <circle cx="396" cy="208" r="12" fill="#29E0E0" opacity="0.2"/>
+  <circle cx="396" cy="208" r="7" fill="#29E0E0" opacity="0.9"/>
+
+  <!-- Sparkles -->
+  <circle cx="135" cy="115" r="4" fill="#F6F3FF" opacity="0.8"/>
+  <circle cx="385" cy="95" r="3" fill="#F6F3FF" opacity="0.6"/>
+  <circle cx="95" cy="360" r="3.5" fill="#F6F3FF" opacity="0.7"/>
+  <circle cx="405" cy="390" r="3" fill="#F6F3FF" opacity="0.5"/>
+  <circle cx="330" cy="430" r="4" fill="#FFC53D" opacity="0.6"/>
+  <circle cx="155" cy="410" r="3" fill="#29E0E0" opacity="0.6"/>
+  <circle cx="120" cy="240" r="2.5" fill="#FF5A5F" opacity="0.5"/>
+  <circle cx="410" cy="280" r="2.5" fill="#3DDC97" opacity="0.5"/>
+</svg>

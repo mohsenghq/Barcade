@@ -1,0 +1,70 @@
+{
+  "@@locale": "en",
+  "appTitle": "Starcade",
+  "@appTitle": {
+    "description": "The app display name."
+  },
+
+  "launcherTitle": "Starcade",
+  "launcherChess": "Chess",
+  "launcherMoreSoon": "More games coming soon",
+  "launcherWins": "Wins: {count}",
+  "@launcherWins": {
+    "description": "Win counter shown on the chess card.",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "chessComingSoon": "Chess is coming soon on web.",
+
+  "chessAiModelMissing": "The chess AI model isn't installed. Fetch it with `dart run tool/fetch_net.dart`, then restart the app.",
+
+  "chessModeHotseat": "Hotseat",
+  "chessModeVsAi": "vs AI",
+  "chessModeVsAiNote": "Training model — basic opponent",
+  "chessModeLocal": "Local multiplayer",
+  "chessModeLocalSoon": "Next update",
+  "chessModeOnlineLocked": "Online — locked",
+  "chessNewGame": "New game",
+  "chessRematch": "Rematch",
+  "chessUndo": "Undo",
+  "chessHint": "Hint",
+  "chessDraw": "Draw",
+  "chessResign": "Resign",
+  "chessWhite": "White",
+  "chessBlack": "Black",
+  "chessYou": "You",
+  "chessAi": "AI",
+  "chessWins": "wins",
+  "chessResultMate": "Checkmate",
+  "chessResultStalemate": "Stalemate",
+  "chessResultDraw": "Draw",
+  "chessResultYouWon": "You won",
+  "chessResultAiWon": "AI won",
+  "chessDrawReason": "by {reason}",
+  "@chessDrawReason": {
+    "description": "Draw modifier, e.g. 'by repetition'.",
+    "placeholders": {
+      "reason": {"type": "String"}
+    }
+  },
+  "chessHintMove": "Hint: {move}",
+  "@chessHintMove": {
+    "description": "Suggested move shown when the player asks for a hint.",
+    "placeholders": {
+      "move": {"type": "String"}
+    }
+  },
+  "chessMoveCount": "{count, plural, one{{count} move} other{{count} moves}}",
+  "@chessMoveCount": {
+    "description": "Moves played when the game ended.",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "chessConfirmDraw": "Agree to a draw?",
+  "chessConfirmResign": "Resign the game?",
+  "chessCancel": "Cancel",
+  "chessConfirm": "Confirm"
+}

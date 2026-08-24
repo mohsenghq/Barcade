@@ -1,0 +1,58 @@
+name: starcade
+description: "Starcade — a cosmic hub of offline mini-games, starting with chess."
+publish_to: 'none'
+version: 2.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+
+  # Game engine + audio (D1, D8) — pinned: Flame ships breaking changes.
+  flame: 1.38.0
+  flame_audio: 2.12.2
+
+  # Chess (T3/T4) — pinned: native-only, web builds must never import these.
+  dartchess: 0.13.1
+  chessground: 10.1.1
+
+  # State management (D2)
+  flutter_riverpod: ^3.4.2
+
+  # Persistence (D3, D4, D12)
+  shared_preferences: ^2.5.5
+  path_provider: ^2.1.6
+  crypto: ^3.0.7
+
+  # UI (D7)
+  flutter_animate: ^4.5.2
+  flutter_onnxruntime: ^1.8.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  generate: true   # gen_l10n (D9) — config in l10n.yaml
+
+  assets:
+    - assets/audio/
+    - assets/fonts/
+    - assets/ai/
+
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito-Variable.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf

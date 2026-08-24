@@ -1,0 +1,18 @@
+# Dart/Flutter
+.dart_tool/
+.packages
+build/
+.flutter-plugins*
+*.iml
+.idea/
+
+# OS
+.DS_Store
+
+# Local tooling
+tool/.env.local
+
+# Trained model artifact (fetched via tool/fetch_net.dart, never committed);
+# keep the dir itself in git so the pubspec asset declaration resolves.
+assets/ai/*
+!assets/ai/.gitkeep
