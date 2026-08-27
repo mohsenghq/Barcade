@@ -1,0 +1,16 @@
+{
+  "name": "starcade",
+  "private": true,
+  "scripts": {
+    "dev:web": "pnpm --filter @starcade/web dev",
+    "dev:mobile": "pnpm --filter @starcade/mobile start",
+    "build:web": "pnpm --filter @starcade/web build",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r run test",
+    "lint": "pnpm -r run lint"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  }
+}

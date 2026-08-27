@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Nunito:wght@700;800&display=swap");
+
+:root {
+  --indigo: #1B1533;
+  --indigo-deep: #130E24;
+  --indigo-light: #241A45;
+  --coral: #FF5A5F;
+  --cyan: #29E0E0;
+  --gold: #FFC53D;
+  --mint: #3DDC97;
+  --cosmic: #F6F3FF;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--indigo-deep);
+  color: var(--cosmic);
+  overflow-x: hidden;
+}
+
+/* Cosmic background */
+.cosmic-bg {
+  background: radial-gradient(
+      ellipse 135% 135% at 50% -10%,
+      #3A2C70,
+      var(--indigo) 50%,
+      var(--indigo-deep) 100%
+    )
+    no-repeat;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Floating motes */
+.motes {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mote {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: moteFloat 22s linear infinite;
+}
+
+@keyframes moteFloat {
+  0% {
+    transform: translateY(100vh) scale(0.6);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-20px) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Buttons */
+.btn-primary {
+  @apply px-7 py-4 rounded-cosmic font-display font-extrabold text-cosmic
+    transition-all duration-[120ms] ease-out cursor-pointer
+    hover:shadow-glow active:scale-95;
+  background: var(--coral);
+}
+
+.btn-ghost {
+  @apply px-7 py-4 rounded-cosmic font-display font-extrabold text-cosmic
+    border border-surface-stroke bg-surface-strong
+    transition-all duration-[120ms] ease-out cursor-pointer
+    hover:shadow-glow active:scale-95;
+}
+
+/* Cards */
+.card-glass {
+  @apply rounded-cosmic border border-surface-stroke bg-surface p-5;
+}
+
+/* Chess board wrapper */
+.chessboard-wrapper {
+  @apply aspect-square w-full max-w-[min(100%,480px)] mx-auto;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
