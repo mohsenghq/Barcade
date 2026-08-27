@@ -20,15 +20,6 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-
-        // Only ship native libs for real devices — drops x86/x86_64 which
-        // account for ~50 % of the ONNX Runtime .so bulk but are only used
-        // by emulators.  Per-ABI APKs (flutter build apk --split-per-abi)
-        // pick the right slice automatically; this is the safety net for
-        // universal (fat) builds.
-        ndk {
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
-        }
     }
 
     buildTypes {
