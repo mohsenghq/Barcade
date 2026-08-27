@@ -6,6 +6,10 @@
 -keep class io.flutter.**        { *; }
 -keep class io.flutter.plugins.** { *; }
 
+# ── Play Core (referenced by Flutter but not bundled in the app) ─────
+-dontwarn com.google.android.play.core.**
+-keep class com.google.android.play.core.** { *; }
+
 # ── ONNX Runtime ────────────────────────────────────────────────────
 -keep class ai.onnxruntime.** { *; }
 -dontwarn ai.onnxruntime.**
