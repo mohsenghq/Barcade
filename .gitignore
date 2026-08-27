@@ -1,6 +1,8 @@
 # Node.js
 node_modules/
 *.tsbuildinfo
+.next/
+.vercel/
 
 # Dart/Flutter
 .dart_tool/

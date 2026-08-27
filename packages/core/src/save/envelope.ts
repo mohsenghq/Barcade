@@ -1,4 +1,4 @@
-import { checksumOf, checksumMatches } from "./checksum.js";
+import { checksumOf, checksumMatches } from "./checksum";
 
 export const CURRENT_SCHEMA_VERSION = 2;
 

@@ -3,17 +3,17 @@ import {
   chessProfileFromJson,
   chessProfileToJson,
   defaultChessProfile,
-} from "../model/chess-profile.js";
+} from "../model/chess-profile";
 import {
   CURRENT_SCHEMA_VERSION,
   type SaveEnvelope,
   encodeEnvelope,
   signEnvelope,
   tryDecodeEnvelope,
-} from "./envelope.js";
-import { checksumMatches } from "./checksum.js";
-import { migratePayload } from "./migration.js";
-import type { SaveStorage } from "./storage.js";
+} from "./envelope";
+import { checksumMatches } from "./checksum";
+import { migratePayload } from "./migration";
+import type { SaveStorage } from "./storage";
 
 export enum LoadSource {
   Loaded = "loaded",

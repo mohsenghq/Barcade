@@ -1,4 +1,4 @@
-import type { GameState } from "./game-state.js";
+import type { GameState } from "./game-state";
 
 /**
  * AI seam. The trained RL model (RL_game_train) plugs in behind this

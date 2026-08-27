@@ -8,6 +8,7 @@ import type { Color, Key } from "chessground/types";
 import { Chess } from "chess.js";
 import "chessground/assets/chessground.base.css";
 import "chessground/assets/chessground.brown.css";
+import "chessground/assets/chessground.cburnett.css";
 
 interface ChessBoardProps {
   gameState: GameState;

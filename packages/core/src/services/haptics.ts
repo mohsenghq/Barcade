@@ -1,4 +1,4 @@
-import type { SettingsService } from "./settings.js";
+import type { SettingsService } from "./settings";
 
 export enum HapticType {
   Light = "light",

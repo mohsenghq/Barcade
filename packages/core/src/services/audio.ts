@@ -1,4 +1,4 @@
-import type { SettingsService } from "./settings.js";
+import type { SettingsService } from "./settings";
 
 /** Shared SFX pool matching the Flutter asset list. */
 export const SFX_ASSETS = [

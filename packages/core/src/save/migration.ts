@@ -1,4 +1,4 @@
-import { CURRENT_SCHEMA_VERSION } from "./envelope.js";
+import { CURRENT_SCHEMA_VERSION } from "./envelope";
 
 /** Migrate a raw payload map from fromVersion to currentVersion. */
 export function migratePayload(
