@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive-icon foreground: the Starcade star + play triangle from icon_starcade.svg.
+     Canvas is 108×108 dp; content is centred in the inner 72dp (safe zone).
+     We translate the 512-unit SVG viewBox into this space with a 0.140625× scale
+     (72 / 512) and offset so the SVG origin maps to (18,18). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Move origin so the 512-unit SVG content is centred: offset = (108-72)/2 = 18 -->
+    <group
+        android:translateX="18"
+        android:translateY="18"
+        android:scaleX="0.140625"
+        android:scaleY="0.140625">
+
+        <!-- 6-pointed gold star -->
+        <path
+            android:pathData="M256,68 L284,188 L400,144 L316,244 L400,340 L284,296 L256,416 L228,296 L112,340 L196,244 L112,144 L228,188 Z"
+            android:fillColor="#FFC53D" />
+        <!-- Star highlight -->
+        <path
+            android:pathData="M256,120 L274,196 L348,168 L300,238 L348,308 L274,280 L256,356 L238,280 L164,308 L212,238 L164,168 L238,196 Z"
+            android:fillColor="#FFE08A"
+            android:fillAlpha="0.65" />
+
+        <!-- Coral play triangle -->
+        <path
+            android:pathData="M232,192 L232,318 L324,255 Z"
+            android:fillColor="#FF5A5F" />
+        <path
+            android:pathData="M242,206 L242,304 L310,255 Z"
+            android:fillColor="#FF9A9E"
+            android:fillAlpha="0.35" />
+
+        <!-- Cyan orbital ring (ellipse drawn as path approximation) -->
+        <path
+            android:pathData="M256,208 C338.97,208 406,232.88 406,263.6 C406,294.32 338.97,319.2 256,319.2 C173.03,319.2 106,294.32 106,263.6 C106,232.88 173.03,208 256,208 Z"
+            android:strokeColor="#29E0E0"
+            android:strokeWidth="3.5"
+            android:strokeAlpha="0.7"
+            android:fillColor="#00000000"
+            android:rotation="-20"
+            android:pivotX="256"
+            android:pivotY="256" />
+
+        <!-- Sparkles -->
+        <path android:pathData="M135,115 m-4,0 a4,4 0 1,1 8,0 a4,4 0 1,1 -8,0" android:fillColor="#F6F3FF" android:fillAlpha="0.8" />
+        <path android:pathData="M385,95 m-3,0 a3,3 0 1,1 6,0 a3,3 0 1,1 -6,0" android:fillColor="#F6F3FF" android:fillAlpha="0.6" />
+        <path android:pathData="M95,360 m-3.5,0 a3.5,3.5 0 1,1 7,0 a3.5,3.5 0 1,1 -7,0" android:fillColor="#F6F3FF" android:fillAlpha="0.7" />
+        <path android:pathData="M405,390 m-3,0 a3,3 0 1,1 6,0 a3,3 0 1,1 -6,0" android:fillColor="#F6F3FF" android:fillAlpha="0.5" />
+        <path android:pathData="M330,430 m-4,0 a4,4 0 1,1 8,0 a4,4 0 1,1 -8,0" android:fillColor="#FFC53D" android:fillAlpha="0.6" />
+        <path android:pathData="M155,410 m-3,0 a3,3 0 1,1 6,0 a3,3 0 1,1 -6,0" android:fillColor="#29E0E0" android:fillAlpha="0.6" />
+        <path android:pathData="M120,240 m-2.5,0 a2.5,2.5 0 1,1 5,0 a2.5,2.5 0 1,1 -5,0" android:fillColor="#FF5A5F" android:fillAlpha="0.5" />
+        <path android:pathData="M410,280 m-2.5,0 a2.5,2.5 0 1,1 5,0 a2.5,2.5 0 1,1 -5,0" android:fillColor="#3DDC97" android:fillAlpha="0.5" />
+    </group>
+</vector>

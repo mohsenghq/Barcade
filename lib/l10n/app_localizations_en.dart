@@ -30,7 +30,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chessAiModelMissing =>
-      'The chess AI model isn\'t installed. Fetch it with `dart run tool/fetch_net.dart`, then restart the app.';
+      'The chess AI model could not be loaded. Please try restarting the app.';
 
   @override
   String get chessModeHotseat => 'Hotseat';

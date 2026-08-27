@@ -18,7 +18,7 @@
 
   "chessComingSoon": "Chess is coming soon on web.",
 
-  "chessAiModelMissing": "The chess AI model isn't installed. Fetch it with `dart run tool/fetch_net.dart`, then restart the app.",
+  "chessAiModelMissing": "The chess AI model could not be loaded. Please try restarting the app.",
 
   "chessModeHotseat": "Hotseat",
   "chessModeVsAi": "vs AI",

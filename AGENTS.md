@@ -29,8 +29,8 @@ games plug into the same launcher seam. The app is **native-only** for chess
 - **Artifact:** `chess_net.onnx` (fp32, opset 17, IR 8) + `manifest.json`
   (versioning lives in the manifest, NOT ONNX metadata).
 - **Delivery:** RL_game_train tags a `net-v*` GitHub Release; this repo pins the
-  URL + `model_sha256` and fetches into **gitignored** `assets/ai/` via a CI step
-  or `dart run tool/fetch_net.dart`.
+  URL + `model_sha256` and fetches into `assets/ai/` via CI (`dart run tool/fetch_net.dart`)
+  before every build. The model is embedded in all app bundles.
 - **Gating:** `lib/core/chess/ai/` carries a compiled-in
   `expectedNetworkFormatVersion`; the app refuses to run (or shows an update
   banner) on mismatch.

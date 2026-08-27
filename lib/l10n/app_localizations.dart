@@ -133,7 +133,7 @@ abstract class AppLocalizations {
   /// No description provided for @chessAiModelMissing.
   ///
   /// In en, this message translates to:
-  /// **'The chess AI model isn\'t installed. Fetch it with `dart run tool/fetch_net.dart`, then restart the app.'**
+  /// **'The chess AI model could not be loaded. Please try restarting the app.'**
   String get chessAiModelMissing;
 
   /// No description provided for @chessModeHotseat.

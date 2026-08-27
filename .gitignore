@@ -12,7 +12,9 @@ build/
 # Local tooling
 tool/.env.local
 
-# Trained model artifact (fetched via tool/fetch_net.dart, never committed);
-# keep the dir itself in git so the pubspec asset declaration resolves.
-assets/ai/*
-!assets/ai/.gitkeep
+# Trained model artifact — fetched via tool/fetch_net.dart.
+# CI fetches before every build so the model is always embedded.
+# Locally, run `dart run tool/fetch_net.dart` before `flutter build`.
+assets/ai/chess_net.onnx
+assets/ai/manifest.json
+assets/ai/.gitkeep

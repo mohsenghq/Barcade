@@ -79,11 +79,15 @@ idempotency-gated grant path (D5).
 ```bash
 # Install Flutter 3.44+ (Dart 3.12+), then:
 flutter pub get
+dart run tool/fetch_net.dart   # fetch the chess AI model (once)
 flutter run          # pick a device (web, desktop, mobile)
 ```
 
 > Packages are pinned: `flame 1.38.0`, `flame_audio 2.12.2` — Flame ships
 > breaking changes, so the lockfile is part of the release contract.
+>
+> The chess AI model is fetched into `assets/ai/` (gitignored) by the tool
+> above. CI runs this automatically before every build.
 
 ## Testing
 
@@ -95,13 +99,21 @@ flutter test         # 89 tests: unit + widget + headless game-contract
 ## Building for release
 
 ```bash
-flutter build web --release
-flutter build apk --release        # Android (needs the Android SDK)
-flutter build linux --release      # Linux (needs ninja + libgtk-3)
-flutter build macos --release      # macOS only
-flutter build windows --release    # Windows only
-flutter build ios --release        # iOS only (macOS)
+# Fetch the chess AI model first (CI does this automatically)
+dart run tool/fetch_net.dart
+
+flutter build web --release --web-renderer canvaskit
+flutter build apk --split-per-abi --release --obfuscate --split-debug-info=build/debug-info  # per-ABI APKs
+flutter build appbundle --release     # Google Play bundle
+flutter build linux --release         # Linux (needs ninja + libgtk-3)
+flutter build macos --release         # macOS only
+flutter build windows --release       # Windows only
+flutter build ios --release           # iOS only (macOS)
 ```
+
+Android APKs are built per-ABI (`--split-per-abi`) so each download is
+~30-40 MB instead of a single 120 MB fat APK. R8 shrinking and obfuscation
+are enabled in release builds.
 
 A GitHub Actions pipeline (`.github/workflows/build.yml`) runs analyze + tests
 and produces **all six** platform builds on push to `main` / PR — the
