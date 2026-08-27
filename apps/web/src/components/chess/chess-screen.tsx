@@ -186,7 +186,8 @@ export function ChessScreen({
           <ChessBoard
             gameState={gameState}
             onMove={handleUserMove}
-            flipped={mode === "ai"}
+            flipped={false}
+            humanColor={mode === "ai" ? "white" : gameState.sideToMove}
           />
         </div>
 
