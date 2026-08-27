@@ -46,22 +46,21 @@ export function ChessBoard({
   const apiRef = useRef<Api | null>(null);
   const onMoveRef = useRef(onMove);
   onMoveRef.current = onMove;
-  const flippedRef = useRef(flipped);
-  flippedRef.current = flipped;
   const humanColorRef = useRef(humanColor);
   humanColorRef.current = humanColor;
 
   // Init chessground ONCE on mount
+  // In chessground v9, movable.color must be "both" so both sides can select pieces.
+  // We enforce turn logic in the React layer (handleUserMove checks isAiTurn).
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const { dests, turn } = buildDests(gameState.fen);
+    const { dests } = buildDests(gameState.fen);
     const orientation: Color = flipped ? "black" : "white";
 
     apiRef.current = Chessground(containerRef.current, {
       fen: gameState.fen,
       orientation,
-      turnColor: turn as Color,
       coordinates: true,
       highlight: {
         lastMove: true,
@@ -71,13 +70,18 @@ export function ChessBoard({
         duration: 200,
       },
       movable: {
-        color: humanColor,
+        color: "both",
         free: false,
         dests,
         showDests: true,
         events: {
           after: (orig, dest) => {
+            // Only process if it's the human's turn
+            const currentHumanColor = humanColorRef.current;
             const chess = new Chess(gameState.fen);
+            const turn = chess.turn();
+            if (turn !== currentHumanColor) return; // Not human's turn
+
             const moves = chess.moves({ verbose: true });
             const move = moves.find(
               (m) => m.from === orig && m.to === dest,
@@ -105,23 +109,23 @@ export function ChessBoard({
   // Update position when fen changes (after a move)
   useEffect(() => {
     if (!apiRef.current) return;
-    const { dests, turn } = buildDests(gameState.fen);
-    const movableColor = humanColorRef.current;
+    const { dests } = buildDests(gameState.fen);
     apiRef.current.set({
       fen: gameState.fen,
-      turnColor: turn as Color,
       movable: {
-        color: movableColor,
+        color: "both",
         dests,
         events: {
           after: (orig, dest) => {
-            const chess = new Chess(gameState.fen);
-            const moves = chess.moves({ verbose: true });
-            const move = moves.find(
-              (m) => m.from === orig && m.to === dest,
-            );
-            if (move?.promotion) {
-              onMoveRef.current(`${orig}${dest}${move.promotion}`);
+            const currentHumanColor = humanColorRef.current;
+            const c = new Chess(gameState.fen);
+            const turn = c.turn();
+            if (turn !== currentHumanColor) return;
+
+            const ms = c.moves({ verbose: true });
+            const mv = ms.find((m) => m.from === orig && m.to === dest);
+            if (mv?.promotion) {
+              onMoveRef.current(`${orig}${dest}${mv.promotion}`);
             } else {
               onMoveRef.current(`${orig}${dest}`);
             }
@@ -136,13 +140,12 @@ export function ChessBoard({
       <div
         ref={containerRef}
         className="w-full h-full"
-        style=
+        style={
           {
-            {
-              "--cg-light": BOARD_THEMES.nebula.light,
-              "--cg-dark": BOARD_THEMES.nebula.dark,
-            } as React.CSSProperties
-          }
+            "--cg-light": BOARD_THEMES.nebula.light,
+            "--cg-dark": BOARD_THEMES.nebula.dark,
+          } as React.CSSProperties
+        }
       />
     </div>
   );
