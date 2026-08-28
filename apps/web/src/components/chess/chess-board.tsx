@@ -48,10 +48,10 @@ export function ChessBoard({
   onMoveRef.current = onMove;
   const humanColorRef = useRef(humanColor);
   humanColorRef.current = humanColor;
+  const gameStateRef = useRef(gameState);
+  gameStateRef.current = gameState;
 
   // Init chessground ONCE on mount
-  // In chessground v9, movable.color must be "both" so both sides can select pieces.
-  // We enforce turn logic in the React layer (handleUserMove checks isAiTurn).
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -69,6 +69,7 @@ export function ChessBoard({
       animation: {
         duration: 200,
       },
+      trustAllEvents: true,
       movable: {
         color: "both",
         free: false,
@@ -76,11 +77,12 @@ export function ChessBoard({
         showDests: true,
         events: {
           after: (orig, dest) => {
-            // Only process if it's the human's turn
+            // Use refs for stable access to current values
             const currentHumanColor = humanColorRef.current;
-            const chess = new Chess(gameState.fen);
+            const currentState = gameStateRef.current;
+            const chess = new Chess(currentState.fen);
             const turn = chess.turn() === "w" ? "white" : "black";
-            if (turn !== currentHumanColor) return; // Not human's turn
+            if (turn !== currentHumanColor) return;
 
             const moves = chess.moves({ verbose: true });
             const move = moves.find(
@@ -118,7 +120,8 @@ export function ChessBoard({
         events: {
           after: (orig, dest) => {
             const currentHumanColor = humanColorRef.current;
-            const c = new Chess(gameState.fen);
+            const currentState = gameStateRef.current;
+            const c = new Chess(currentState.fen);
             const turn = c.turn() === "w" ? "white" : "black";
             if (turn !== currentHumanColor) return;
 

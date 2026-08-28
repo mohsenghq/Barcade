@@ -9,26 +9,24 @@
  * 2. The model is fetched on first use and cached.
  */
 
+import * as ort from "onnxruntime-web";
 import { Chess } from "chess.js";
 import { encodeFen } from "./az119-encoder";
 import { decodePolicy } from "./az119-policy";
 import type { GameState } from "./game-state";
 
+// Configure ONNX Runtime for browser
+ort.env.wasm.numThreads = 1; // single-threaded for compatibility
+
 // Lazy-loaded ORT session
-let _sessionPromise: Promise<any> | null = null;
+let _sessionPromise: Promise<ort.InferenceSession> | null = null;
 let _sessionReady = false;
 
-async function loadSession(): Promise<any> {
+async function loadSession(): Promise<ort.InferenceSession> {
   if (_sessionPromise) return _sessionPromise;
 
   _sessionPromise = (async () => {
     try {
-      // Dynamic import so the chunk is only loaded when AI is used
-      const ort = await import("onnxruntime-web");
-
-      // Use WASM backend (most compatible)
-      ort.env.wasm.numThreads = navigator.hardwareConcurrency ?? 2;
-
       const response = await fetch("/chess_net.onnx");
       if (!response.ok) {
         throw new Error(
@@ -40,6 +38,12 @@ async function loadSession(): Promise<any> {
         executionProviders: ["wasm"],
       });
       _sessionReady = true;
+      console.log(
+        "[WebChessAI] Model loaded, inputs:",
+        session.inputNames,
+        "outputs:",
+        session.outputNames,
+      );
       return session;
     } catch (err) {
       console.error("[WebChessAI] Failed to load ONNX model:", err);
@@ -56,40 +60,41 @@ async function loadSession(): Promise<any> {
  * Returns { policy: scored moves, value }.
  */
 async function evaluate(fen: string): Promise<{
-  scoredMoves: { from: string; to: string; promotion?: string; score: number }[];
+  scoredMoves: {
+    from: string;
+    to: string;
+    promotion?: string;
+    score: number;
+  }[];
   value: number;
 }> {
   const session = await loadSession();
-  const chess = new Chess(fen);
 
-  // Encode position → [1, 119, 8, 8]
-  const inputTensor = encodeFen(fen);
+  // Encode position → Float32Array of 7616 values [1, 119, 8, 8]
+  const inputData = encodeFen(fen);
 
-  // Run inference
-  const inputName = session.inputNames[0];
-  const outputNames = session.outputNames;
+  // Create tensor with explicit shape
+  const inputTensor = new ort.Tensor("float32", inputData, [1, 119, 8, 8]);
 
-  const feeds: Record<string, any> = {};
-  // onnxruntime-web wants Float32Array with explicit dims
-  feeds[inputName] = new Float32Array(inputTensor);
+  const feeds: Record<string, ort.Tensor> = {};
+  feeds[session.inputNames[0]] = inputTensor;
 
   const results = await session.run(feeds);
 
-  // Extract policy logits (4672 values)
-  const policyOutput = results["policy_logits"] ?? results[outputNames[0]];
-  const policyData = policyOutput?.data;
-  if (!policyData) {
+  // Extract policy logits (4672 values as [1,8,8,73])
+  const policyOutput = results["policy_logits"];
+  if (!policyOutput?.data) {
     throw new Error("No policy output from model");
   }
 
   // Extract value
-  const valueOutput = results["value"] ?? results[outputNames[1]];
-  const valueData = valueOutput?.data;
-  const value = valueData ? valueData[0] : 0;
+  const valueOutput = results["value"];
+  const value = valueOutput?.data ? Number(valueOutput.data[0]) : 0;
 
   // Get legal moves and decode policy
+  const chess = new Chess(fen);
   const moves = chess.moves({ verbose: true });
-  const scoredMoves = decodePolicy(policyData as Float32Array, moves);
+  const scoredMoves = decodePolicy(policyOutput.data as Float32Array, moves);
 
   return { scoredMoves, value };
 }
