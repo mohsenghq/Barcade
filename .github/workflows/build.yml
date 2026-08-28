@@ -53,6 +53,9 @@ jobs:
       # Fetch the chess AI model for web bundles.
       - run: dart run tool/fetch_net.dart || true
         shell: bash
+      # Copy model to web public dir so the React app can load it at runtime
+      - run: node tool/fetch_web_model.mjs || echo '::warning::Model not available — web build will proceed without embedded AI'
+        shell: bash
       - run: flutter build web --release
       - name: Upload to GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
