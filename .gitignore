@@ -24,3 +24,9 @@ tool/.env.local
 assets/ai/chess_net.onnx
 assets/ai/manifest.json
 assets/ai/.gitkeep
+
+# Web app model (copied from assets/ai/ by tool/fetch_web_model.mjs)
+apps/web/public/chess_net.onnx
+
+# Training repo (cloned separately)
+rl-for-games/
