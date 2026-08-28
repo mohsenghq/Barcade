@@ -6,7 +6,7 @@ import {
   GameStatus,
   SaveController,
   SettingsService,
-  type ChessProfile,
+  webChessAI,
 } from "@starcade/core";
 import { ChessBoard } from "./chess-board";
 import { ChessClock } from "./chess-clock";
@@ -31,6 +31,7 @@ export function ChessScreen({
   const [gameState, setGameState] = useState(() => new GameState());
   const [ended, setEnded] = useState(false);
   const [isAiTurn, setIsAiTurn] = useState(false);
+  const [aiThinking, setAiThinking] = useState(false);
   const [whiteElapsed, setWhiteElapsed] = useState(0);
   const [blackElapsed, setBlackElapsed] = useState(0);
   const [clockHistory, setClockHistory] = useState<[number, number][]>([]);
@@ -42,9 +43,12 @@ export function ChessScreen({
   const [showConfirm, setShowConfirm] = useState<
     { title: string; onConfirm: () => void } | null
   >(null);
+  const [aiModelError, setAiModelError] = useState(false);
 
   const gameStateRef = useRef(gameState);
   gameStateRef.current = gameState;
+  const endedRef = useRef(ended);
+  endedRef.current = ended;
 
   // Clock ticker
   useEffect(() => {
@@ -59,12 +63,31 @@ export function ChessScreen({
     return () => clearInterval(interval);
   }, [ended]);
 
+  const recordResult = useCallback(
+    (gs: GameState, winner: string | null, isDraw: boolean) => {
+      if (mode === "hotseat") return;
+      const p = save.profile;
+      const humanWin = !isDraw && winner === "white" ? 1 : 0;
+      const humanLoss = !isDraw && winner === "black" ? 1 : 0;
+      const draw = isDraw ? 1 : 0;
+      save.replaceProfile({
+        ...p,
+        wins: p.wins + humanWin,
+        losses: p.losses + humanLoss,
+        draws: p.draws + draw,
+        aiWins: p.aiWins + humanLoss,
+        aiLosses: p.aiLosses + humanWin,
+        aiDraws: p.aiDraws + draw,
+      });
+    },
+    [mode, save],
+  );
+
   const checkGameEnd = useCallback(
     (gs: GameState) => {
       switch (gs.status) {
         case GameStatus.Checkmate: {
-          const winner =
-            gs.sideToMove === "white" ? "black" : "white";
+          const winner = gs.sideToMove === "white" ? "black" : "white";
           const subtitle =
             mode === "ai"
               ? winner === "white"
@@ -105,24 +128,43 @@ export function ChessScreen({
     [mode],
   );
 
-  const recordResult = useCallback(
-    (gs: GameState, winner: string | null, isDraw: boolean) => {
-      if (mode === "hotseat") return;
-      const p = save.profile;
-      const humanWin = !isDraw && winner === "white" ? 1 : 0;
-      const humanLoss = !isDraw && winner === "black" ? 1 : 0;
-      const draw = isDraw ? 1 : 0;
-      save.replaceProfile({
-        ...p,
-        wins: p.wins + humanWin,
-        losses: p.losses + humanLoss,
-        draws: p.draws + draw,
-        aiWins: p.aiWins + humanLoss,
-        aiLosses: p.aiLosses + humanWin,
-        aiDraws: p.aiDraws + draw,
-      });
+  // Schedule AI to play after a short delay
+  const scheduleAiTurn = useCallback(
+    (gs: GameState) => {
+      if (endedRef.current) return;
+      setIsAiTurn(true);
+      setAiThinking(true);
+
+      setTimeout(async () => {
+        if (endedRef.current) return;
+        try {
+          const move = await webChessAI.chooseMove(gs);
+          if (endedRef.current) return;
+
+          if (move === null) {
+            // Model missing — show error and let human continue
+            setAiModelError(true);
+            setIsAiTurn(false);
+            setAiThinking(false);
+            return;
+          }
+
+          // Apply the AI's move
+          if (gs.makeMove(move)) {
+            setClockHistory((h) => [...h, [whiteElapsed, blackElapsed]]);
+            setGameState(new GameState(gs.fen));
+            checkGameEnd(gs);
+          }
+        } catch (err) {
+          console.error("[ChessScreen] AI move failed:", err);
+          setAiModelError(true);
+        } finally {
+          setIsAiTurn(false);
+          setAiThinking(false);
+        }
+      }, 400); // brief delay so the board shows the human's move first
     },
-    [mode, save],
+    [whiteElapsed, blackElapsed, checkGameEnd],
   );
 
   const handleUserMove = useCallback(
@@ -131,10 +173,16 @@ export function ChessScreen({
       const gs = gameStateRef.current;
       if (!gs.makeMove(uci)) return;
       setClockHistory((h) => [...h, [whiteElapsed, blackElapsed]]);
-      setGameState(new GameState(gs.fen)); // trigger re-render
+      const newGs = new GameState(gs.fen);
+      setGameState(newGs);
       checkGameEnd(gs);
+
+      // In AI mode, if it's now the AI's turn (black), trigger it
+      if (mode === "ai" && newGs.sideToMove === "black" && !newGs.isGameOver) {
+        scheduleAiTurn(newGs);
+      }
     },
-    [isAiTurn, ended, whiteElapsed, blackElapsed, checkGameEnd],
+    [isAiTurn, ended, mode, whiteElapsed, blackElapsed, checkGameEnd, scheduleAiTurn],
   );
 
   const handleRematch = useCallback(() => {
@@ -142,6 +190,8 @@ export function ChessScreen({
     setGameState(new GameState());
     setEnded(false);
     setIsAiTurn(false);
+    setAiThinking(false);
+    setAiModelError(false);
     setWhiteElapsed(0);
     setBlackElapsed(0);
     setClockHistory([]);
@@ -163,6 +213,11 @@ export function ChessScreen({
       <span className="font-display font-bold text-sm flex-1 truncate">
         {name}
       </span>
+      {aiThinking && side === "black" && (
+        <span className="text-xs text-cyan animate-pulse font-display">
+          Thinking…
+        </span>
+      )}
       <ChessClock
         elapsed={side === "white" ? whiteElapsed : blackElapsed}
         active={active}
@@ -180,6 +235,14 @@ export function ChessScreen({
       <div className="flex flex-col gap-3 max-w-lg mx-auto w-full flex-1">
         {/* Top player bar */}
         {playerBar(topName, "black", blackActive)}
+
+        {/* AI model missing warning */}
+        {aiModelError && (
+          <div className="bg-red-900/40 border border-red-500/30 rounded-lg px-4 py-2 text-sm text-red-300 font-display text-center">
+            Chess AI model not found. Place <code>chess_net.onnx</code> in{" "}
+            <code>apps/web/public/</code> and restart.
+          </div>
+        )}
 
         {/* Board */}
         <div className="flex-1 flex items-center justify-center">

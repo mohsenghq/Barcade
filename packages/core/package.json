@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "chess.js": "^1.4.0",
-    "onnxruntime-common": "^1.23.0"
+    "onnxruntime-common": "^1.23.0",
+    "onnxruntime-web": "^1.29.0"
   },
   "devDependencies": {
     "typescript": "^5.7.0",

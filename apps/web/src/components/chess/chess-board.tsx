@@ -79,7 +79,7 @@ export function ChessBoard({
             // Only process if it's the human's turn
             const currentHumanColor = humanColorRef.current;
             const chess = new Chess(gameState.fen);
-            const turn = chess.turn();
+            const turn = chess.turn() === "w" ? "white" : "black";
             if (turn !== currentHumanColor) return; // Not human's turn
 
             const moves = chess.moves({ verbose: true });
@@ -119,7 +119,7 @@ export function ChessBoard({
           after: (orig, dest) => {
             const currentHumanColor = humanColorRef.current;
             const c = new Chess(gameState.fen);
-            const turn = c.turn();
+            const turn = c.turn() === "w" ? "white" : "black";
             if (turn !== currentHumanColor) return;
 
             const ms = c.moves({ verbose: true });

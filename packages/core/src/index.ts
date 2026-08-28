@@ -17,6 +17,8 @@ export { SaveController, LoadSource, type LoadResult } from "./save/save-control
 export { GameState, GameStatus } from "./chess/game-state";
 export type { ChessAI } from "./chess/chess-ai";
 export { encodeFen } from "./chess/az119-encoder";
+export { decodePolicy, moveToIndex, squareToIndex, indexToSquare } from "./chess/az119-policy";
+export { WebChessAI, webChessAI } from "./chess/web-chess-ai";
 
 // Services
 export {
